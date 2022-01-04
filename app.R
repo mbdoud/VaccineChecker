@@ -47,8 +47,8 @@ server <- function(input,output) {
     poly_in_v1 <- grepl("polysorbate", formatted_ingredients(input$vaccine1), ignore.case = TRUE)
     poly_in_v2 <- grepl("polysorbate", formatted_ingredients(input$vaccine2), ignore.case = TRUE)
     
-    if((peg_in_v1 && poly_in_v2) || (peg_in_v2 && poly_in_v1))
-    { paste("Caution: Polyethylene glycol (PEG) and polysorbate are separately present in the selected vaccines any may exhibit allergic cross-reactivity.")}
+    if((peg_in_v1 && poly_in_v2) || (peg_in_v2 && poly_in_v1) || (peg_in_v1 && peg_in_v2) || (poly_in_v1 && poly_in_v2))
+    { paste("Caution: Some form of polyethylene glycol (PEG) and/or polysorbate are present in both of the selected vaccines any may exhibit allergic cross-reactivity.")}
     else
     { paste("")}
   })
