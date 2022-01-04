@@ -22,7 +22,9 @@ ui <- fluidPage(
   br(),
   textOutput(outputId="vaccine2_ingredients"),
   br(),
-  textOutput(outputId="common_ingredients")
+  textOutput(outputId="common_ingredients"),
+  br(),
+  textOutput(outputId="pegwarning")
 )
 
 # shiny server
@@ -36,6 +38,20 @@ server <- function(input,output) {
     else
     { paste("No ingredients in common identified.") }
     })
+
+  output$pegwarning <- renderText({
+    
+    # Checking to see if PEG and polysorbate are separately present in the selected vaccines
+    peg_in_v1 <- grepl("peg", formatted_ingredients(input$vaccine1), ignore.case = TRUE)
+    peg_in_v2 <- grepl("peg", formatted_ingredients(input$vaccine2), ignore.case = TRUE)
+    poly_in_v1 <- grepl("polysorbate", formatted_ingredients(input$vaccine1), ignore.case = TRUE)
+    poly_in_v2 <- grepl("polysorbate", formatted_ingredients(input$vaccine2), ignore.case = TRUE)
+    
+    if((peg_in_v1 && poly_in_v2) || (peg_in_v2 && poly_in_v1))
+    { paste("Caution: Polyethylene glycol (PEG) and polysorbate are separately present in the selected vaccines any may exhibit allergic cross-reactivity.")}
+    else
+    { paste("")}
+  })
 }
 
 # run the shiny app
